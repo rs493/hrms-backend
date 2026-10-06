@@ -26,7 +26,7 @@ spring:
     # Render: set HRMS_MAIL_HOST, HRMS_MAIL_PORT, HRMS_MAIL_USERNAME,
     # SPRING_MAIL_PASSWORD, and HRMS_MAIL_FROM - mail-secrets.yml is not used.
     host: ${HRMS_MAIL_HOST:smtp.gmail.com}
-    port: ${HRMS_MAIL_PORT:587}
+    port: ${HRMS_MAIL_PORT:465}
     username: ${HRMS_MAIL_USERNAME:}
     password: ${SPRING_MAIL_PASSWORD:}
     properties:
@@ -34,7 +34,7 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
+            enable: false
             required: true
         transport:
           protocol: smtp
