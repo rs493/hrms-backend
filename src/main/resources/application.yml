@@ -1,0 +1,54 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  config:
+    # Local-only secrets (gitignored). Copy from config/mail-secrets.yml.example.
+    # optional:file - missing files do not fail startup (safe for Render).
+    import:
+      - optional:file:./config/mail-secrets.yml
+      - optional:file:./hrms-backend/config/mail-secrets.yml
+      - optional:file:config/mail-secrets.yml
+  datasource:
+    url: ${HRMS_DATABASE_URL:jdbc:mysql://localhost:3306/hrms}
+    username: ${HRMS_DATABASE_USERNAME:root}
+    password: ${HRMS_DATABASE_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  mail:
+    # Local: optional config/mail-secrets.yml can override username/password/from.
+    # Render: set HRMS_MAIL_HOST, HRMS_MAIL_PORT, HRMS_MAIL_USERNAME,
+    # SPRING_MAIL_PASSWORD, and HRMS_MAIL_FROM - mail-secrets.yml is not used.
+    host: ${HRMS_MAIL_HOST:smtp.gmail.com}
+    port: ${HRMS_MAIL_PORT:587}
+    username: ${HRMS_MAIL_USERNAME:}
+    password: ${SPRING_MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        transport:
+          protocol: smtp
+
+app:
+  security:
+    jwt:
+      secret: ${HRMS_JWT_SECRET:}
+      expiration: ${HRMS_JWT_EXPIRATION:PT1H}
+  bootstrap:
+    super-admin:
+      email: ${HRMS_BOOTSTRAP_SUPER_ADMIN_EMAIL:}
+      password: ${HRMS_BOOTSTRAP_SUPER_ADMIN_PASSWORD:}
+  onboarding:
+    activation-base-url: ${HRMS_ONBOARDING_ACTIVATION_BASE_URL:http://localhost:3000/activate}
+    activation-token-expiration-minutes: ${HRMS_ONBOARDING_ACTIVATION_TOKEN_EXPIRATION_MINUTES:60}
+    mail-from: ${HRMS_MAIL_FROM:}
